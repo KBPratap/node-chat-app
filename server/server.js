@@ -18,15 +18,17 @@ io.on('connection', (socket) => {
         console.log('client was disconnected')
     })
 
-    socket.emit('newMessage', {
-        from: 'kbp_server',
-        text: 'test new message',
-        createdAt: new Date().toDateString()
-    })
+    // socket.emit('newMessage', {
+    //     from: 'kbp_server',
+    //     text: 'test new message',
+    //     createdAt: new Date().toDateString()
+    // })
 
     socket.on('createMessage', (message) => {
         message.createdAt = new Date().toDateString()
         console.log('createMessage ', message);
+
+        io.emit('newMessage', message)
     })
 })
 
