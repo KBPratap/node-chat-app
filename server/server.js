@@ -17,6 +17,17 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('client was disconnected')
     })
+
+    socket.emit('newMessage', {
+        from: 'kbp_server',
+        text: 'test new message',
+        createdAt: new Date().toDateString()
+    })
+
+    socket.on('createMessage', (message) => {
+        message.createdAt = new Date().toDateString()
+        console.log('createMessage ', message);
+    })
 })
 
 server.listen(port, () => {
