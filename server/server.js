@@ -14,21 +14,29 @@ app.use(express.static(publicPath))
 
 io.on('connection', (socket) => {
     console.log('New user connected')
-    socket.on('disconnect', () => {
-        console.log('client was disconnected')
+
+    socket.emit('newMessage', {
+        from: 'admin',
+        text: 'welcome to the chat app',
+        createdAt: new Date().getTime()
     })
 
-    // socket.emit('newMessage', {
-    //     from: 'kbp_server',
-    //     text: 'test new message',
-    //     createdAt: new Date().toDateString()
-    // })
+    socket.broadcast.emit('newMessage', {
+        from: 'admin',
+        text: 'new user joined',
+        createdAt: new Date().getTime()
+    })
 
     socket.on('createMessage', (message) => {
-        message.createdAt = new Date().toDateString()
+        message.createdAt = new Date().getTime()
         console.log('createMessage ', message);
 
-        io.emit('newMessage', message)
+        // io.emit('newMessage', message)
+        socket.broadcast.emit('newMessage', message)
+    })
+
+    socket.on('disconnect', () => {
+        console.log('client was disconnected')
     })
 })
 
