@@ -26,3 +26,21 @@ $('#message-form').on('submit', function(e){
         $('#message-text').val('')
     })
 })
+
+let loc = $('#send-location')
+loc.on('click', function(e){
+    if(! navigator.geolocation) {
+        return alert('Geolocation not supported by your browser.')
+    }
+
+    navigator.geolocation.getCurrentPosition(function(position) {
+        console.log(position)
+        socket.emit('createLocationMessage', {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+        })
+    }, function (err) {
+        alert('Unable to fetch location.')
+    })
+
+})
