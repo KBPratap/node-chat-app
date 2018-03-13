@@ -37,10 +37,10 @@ io.on("connection", socket => {
   });
 
   socket.on("createLocationMessage", coords => {
-    socket.broadcast.emit(
-      "newMessage",
-      generateMessage("Admin", `${coords.latitude}, ${coords.longitude}`)
-    );
+    // socket.broadcast.emit(
+    //   "newMessage",
+    //   generateMessage("Admin", `${coords.latitude}, ${coords.longitude}`)
+    // );
     io.emit(
       "newLocationMessage",
       generateLocationMessage("Admin", coords.latitude, coords.longitude)
