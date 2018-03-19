@@ -20,7 +20,6 @@ function scrollToBottom() {
   ) {
     console.log("Should scroll");
     messages.scrollTop(scrollHeight);
-  } else {
   }
 }
 
