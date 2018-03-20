@@ -52,19 +52,32 @@ io.on("connection", socket => {
   });
 
   socket.on("createMessage", (message, callback) => {
-    console.log("createMessage ", message);
-    socket.broadcast.emit(
-      "newMessage",
-      generateMessage(message.from, message.text)
-    );
+    // console.log("createMessage ", message);
+    let user = users.getUser(socket.id);
+    if (user && isRealString(message.text)) {
+      // socket.broadcast.emit(
+      //   "newMessage",
+      //   generateMessage(user.from, message.text)
+      // );
+
+      io
+        .to(user.room)
+        .emit("newMessage", generateMessage(user.name, message.text));
+    }
     callback("This is from server");
   });
 
   socket.on("createLocationMessage", coords => {
-    io.emit(
-      "newLocationMessage",
-      generateLocationMessage("admin", coords.latitude, coords.longitude)
-    );
+    let user = users.getUser(socket.id);
+    if (user) {
+      // console.log(user, coords);
+      io
+        .to(user.room)
+        .emit(
+          "newLocationMessage",
+          generateLocationMessage(user.name, coords.latitude, coords.longitude)
+        );
+    }
   });
 
   socket.on("disconnect", () => {
